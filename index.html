@@ -3,12 +3,28 @@
 <head>
 	<title>Snow</title>
 </head>
-<body>
+<body style='text-align:center;'>
 	<canvas id='canv' height='800px' width='800px'></canvas>
 	<div>
-		<input id='dend' type='range' value='3' min='1' max='10' oninput="adjustDendrites(this.value)">
-		<input id='tiers' type='range' value='6' min='1' max='6' oninput="adjustTier(this.value)">
-		<input id='skew' type='range' value='0' min='0' max='360' oninput="adjustSkew(this.value)">
+		<span>
+			Dendrites<input id='dend' type='range' value='3' min='1' max='10' oninput="adjustDendrites(this.value)">
+		</span>
+		<span>
+			Tiers<input id='tiers' type='range' value='6' min='1' max='6' oninput="adjustTier(this.value)">
+		</span>
+		<span>
+			Skew<input id='skew' type='range' value='0' min='0' max='360' oninput="adjustSkew(this.value)">
+		</span>
+		<span>
+			Angle<input id='angle' type='range' value='60' min='15' max='150' oninput="adjustAngle(this.value)">
+		</span>
+		<span>
+			Width<input id='width' type='range' value='10' min='5' max='20' oninput="adjustWidth(this.value)">
+		</span>
+		<span>
+			Length<input id='length' type='range' value='100' min='20' max='200' oninput="adjustLength(this.value)">
+		</span>
+		<button id='asynch' onclick='asynchSwitch()'>Asynchronous: On/Off</button>
 		<!-- <input id='ang' type='range' value='60' min='1' max='150'> -->
 	</div>
 	<script src='snow.js'></script>
