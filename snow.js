@@ -8,7 +8,8 @@ const snow = {
   skew: 0,
   outerAngle: 30,
   asynch: false,
-  asyncDelay: 5
+  asyncDelay: 5,
+  colors: ['#870c8c', '#5f09c1', '#202ccc', '#2bc4bc', '#33b220', '#f78b32', '#f73347']
 };
 
 context.lineCap = 'round';
@@ -34,6 +35,7 @@ async function dendrites(x, y, tier, len, wid, c) {
   if (tier > 0) {
     if (snow.asynch) await timeout(snow.asyncDelay);
     context.strokeStyle = `rgb(${c},${c},${c})`;
+    //context.strokeStyle = snow.colors[tier];
     context.lineWidth = wid;
     
     context.save();
