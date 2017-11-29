@@ -4,7 +4,13 @@
 	<title>Snow</title>
 </head>
 <body>
-	<canvas id='canv' height='600px' width='600px'></canvas>
+	<canvas id='canv' height='800px' width='800px'></canvas>
+	<div>
+		<input id='dend' type='range' value='3' min='1' max='10' oninput="adjustDendrites(this.value)">
+		<input id='tiers' type='range' value='6' min='1' max='6' oninput="adjustTier(this.value)">
+		<input id='skew' type='range' value='0' min='0' max='360' oninput="adjustSkew(this.value)">
+		<!-- <input id='ang' type='range' value='60' min='1' max='150'> -->
+	</div>
 	<script src='snow.js'></script>
 </body>
 </html>

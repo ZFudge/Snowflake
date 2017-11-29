@@ -3,16 +3,18 @@ const context = canvas.getContext('2d');
 const snow = {
   width: 10,
   length: 100,
-  tiers: 2,
-  dendrites: 5,
-  skew: 0
+  tiers: 5,
+  dendrites: 6,
+  skew: 0,
+  outerAngle: 60
 };
 
-snow.angle = 360 / snow.dendrites;
 context.lineCap = 'round';
 context.strokeStyle = 'white';
 
 async function iceSeed() {
+  snow.centerAngle = 360 / snow.dendrites;
+  snow.colorUnits = 200 / snow.dendrites;
   context.save();
   context.translate(canvas.width/2, canvas.height/2);
   context.rotate(snow.skew * Math.PI / 180);
@@ -20,10 +22,10 @@ async function iceSeed() {
     console.log(`iceSeed: ${i}`);
     
     context.save();
-    await dendrites(0, 0, snow.tiers, snow.length, snow.width, 999);
+    await dendrites(0, 0, snow.tiers, snow.length, snow.width, 200);
     context.restore();
     
-    context.rotate(snow.angle * Math.PI / 180);
+    context.rotate(snow.centerAngle * Math.PI / 180);
   }
   context.restore();
 }
@@ -33,41 +35,42 @@ async function dendrites(x, y, tier, len, wid, c) {
   //context.fillStyle = 'black';
   //context.fillRect(-500,-500,canvas.width*2, canvas.height*2);
   if (tier > 0) {
-    await timeout(1000);
-    context.strokeStyle = '#'+c;
-    console.log(tier);
-    
+    //await timeout(1);
+
+    console.log(`Tier: ${tier}`);
+
+    context.strokeStyle = `rgb(${c},${c},${c})`;
     context.lineWidth = wid;
     
     context.save();
-    context.rotate(60 * Math.PI / 180);
+
+    context.rotate(snow.outerAngle * Math.PI / 180);
     context.beginPath();
     context.moveTo(0, 0);
     context.lineTo(0, len);
     context.stroke();
     
-    //context.moveTo(0, len);
     context.translate(0, len);
     
     context.save();
     
-    await dendrites(0, len, tier - 1, len * 0.8, wid * 0.8, c-222);
+    await dendrites(0, len, tier - 1, len * 0.5, wid * 0.6, c-snow.colorUnits);
     
     context.restore();
     context.save();
     
-    context.rotate(-60 * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * 0.8, wid * 0.8, c-222);
+    context.rotate(snow.outerAngle * -2 * Math.PI / 180);
+    await dendrites(0, len, tier - 1, len * 0.5, wid * 0.6, c-snow.colorUnits);
     
     context.restore();
     context.save();
     
-    context.rotate(-60 * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * 0.8, wid * 0.8, c-222);
+    context.rotate(-snow.outerAngle * Math.PI / 180);
+    await dendrites(0, len, tier - 1, len * 0.8, wid * 0.8, c-snow.colorUnits);
     
     context.restore();
-    
     context.restore();
+
   }
 }
 
@@ -87,15 +90,41 @@ function keyPushed(btn) {
 }
 
 function recreate() {
-  context.fillStyle = 'black';
+  context.fillStyle = 'white';
   context.fillRect(0,0,canvas.width, canvas.height);
   iceSeed();
 }
 
 /////////////////////////////////////////////////////////
+/*
 canvas.style.backgroundColor = 'darkBlue';
 (function() {
   setTimeout(function() {
     canvas.style.backgroundColor = 'black';
   }, 1000);
 })();
+*/
+
+const dendSlide = document.getElementById('dend');
+function adjustDendrites(newDend) {
+  snow.dendrites = newDend;
+  recreate();
+}
+
+const tierSlide = document.getElementById('tiers');
+function adjustTier(newTiers) {
+  snow.tiers = newTiers;
+  recreate();
+}
+
+const angSlide = document.getElementById('ang');
+function adjustAng(newAng) {
+  snow.angle = newAng;
+  recreate();
+}
+
+const skewSlide = document.getElementById('skew');
+function adjustSkew(newSkew) {
+  snow.skew = newSkew;
+  recreate();
+}
