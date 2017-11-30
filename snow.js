@@ -3,6 +3,8 @@ const context = canvas.getContext('2d');
 const snow = {
   width: 10,
   length: 100,
+  lateralLength: 0.5,
+  apicalLength: 0.8,
   tiers: 5,
   dendrites: 6,
   skew: 0,
@@ -49,19 +51,19 @@ async function dendrites(x, y, tier, len, wid, c) {
     context.translate(0, len);
     context.save();
     
-    await dendrites(0, len, tier - 1, len * 0.5, wid * 0.6, c-snow.colorUnits);
+    await dendrites(0, len, tier - 1, len * snow.lateralLength/*0.5*/, wid * 0.6, c-snow.colorUnits);
     
     context.restore();
     context.save();
     
     context.rotate(snow.outerAngle * -2 * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * 0.5, wid * 0.6, c-snow.colorUnits);
+    await dendrites(0, len, tier - 1, len * snow.lateralLength, wid * 0.6, c-snow.colorUnits);
     
     context.restore();
     context.save();
     
     context.rotate(-snow.outerAngle * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * 0.8, wid * 0.8, c-snow.colorUnits);
+    await dendrites(0, len, tier - 1, len * snow.apicalLength, wid * 0.8, c-snow.colorUnits);
     
     context.restore();
     context.restore();
@@ -116,9 +118,21 @@ function adjustWidth(newWidth) {
   recreate();
 }
 
+const lateralLengthSlide = document.getElementById('lateralLength');
+function adjustLateralLength(newLatLen) {
+  snow.lateralLength = newLatLen;
+  recreate();
+}
+
+const apicalLengthSlide = document.getElementById('apicalLength');
+function adjustApicalLength(newApicLen) {
+  snow.apicalLength = newApicLen;
+  recreate();
+}
+
 const lengthSlide = document.getElementById('length');
-function adjustLength(newLength) {
-  snow.length = newLength;
+function adjustLength(newLen) {
+  snow.length = newLen;
   recreate();
 }
 
