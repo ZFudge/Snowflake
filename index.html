@@ -9,69 +9,77 @@
 		<canvas id='canv' height='700px' width='700px'></canvas>
 		<div id='control-box'>
 			<div class='inner-container'>
-				<span id='tier-value' class='parameters'>4</span>
+				<span id='tier-value' class='parameters'>5</span>
 				<div class='slide'>
 					<span>Tiers</span>
-					<input id='tiers' type='range' value='4' min='1' max='6' oninput="adjustTier(this.value)">
+					<input id='tiers-range' type='range' value='5' min='1' max='6' oninput="adjustTier(this.value)" onclick='setTierDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
-				<span id='dendrite-value' class='parameters'>3</span>
+				<span id='dendrite-value' class='parameters'>6</span>
 				<div class='slide'>
 					<span>Dendrites</span>
-						<input id='dend' type='range' value='3' min='1' max='10' oninput="adjustDendrites(this.value)">
+						<input id='dendrite-range' type='range' value='6' min='1' max='10' oninput="adjustDendrites(this.value)" onclick='setDendriteDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
 				<span id='rotation-value' class='parameters'>0.0 Deg</span>
 				<div class='slide'>
-					<span>Rotate</span>
-						<input id='skew' type='range' step = '0.5' value='0' min='-360' max='360' oninput="adjustSkew(this.value)">
+					<span>Rotation</span>
+						<input id='rotation-range' type='range' step='0.125' value='0' min='-360' max='360' oninput="adjustRotation(this.value)" onclick='setRotationDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
-				<span id='angle-value' class='parameters'>30.0 Deg</span>
+				<span id='angle-value' class='parameters'>60.0 Deg</span>
 				<div class='slide'>
 					<span>Angle</span>
-						<input id='angle' type='range' step = '0.5' min='-150' max='400' value='30' oninput="adjustAngle(this.value)">
+						<input id='angle-range' type='range' step='0.125' min='-150' max='400' value='60' oninput="adjustAngle(this.value)" onclick='setAngleDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
-				<span id='lateral-value' class='parameters'>50.0</span>
+				<span id='bend-value' class='parameters'>0</span>
+				<div class='slide'>
+					<span>Bend</span>
+						<input id='bend-range' type='range' step='0.125' min='-60' max='60' value='0' oninput="adjustBend(this.value)" onclick='setBendDefault()'>
+				</div>
+			</div>
+			<div class='inner-container'>
+				<span id='lateral-value' class='parameters'>40.0</span>
 				<div class='slide'>
 					<span>Lateral Length</span>
-					<input id='lateralLength' type='range'  step='0.025' value='0.5' min='0.1' max='0.85' oninput="adjustLateralLength(this.value)">
+					<input id='lateral-range' type='range'  step='0.0125' value='0.5' min='-0.85' max='0.85' oninput="adjustLateralLength(this.value)" onclick='setLateralDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
-				<span id='apical-value' class='parameters'>80.0</span>
+				<span id='apical-value' class='parameters'>60.0</span>
 				<div class='slide'>
 					<span>Apical Length</span>
-					<input id='apicalLength' type='range' step='0.025' value='0.8' min='0.1' max='1' oninput="adjustApicalLength(this.value)">
+					<input id='apical-range' type='range' step='0.0125' value='0.8' min='-1' max='1' oninput="adjustApicalLength(this.value)" onclick='setApicalDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
 				<span id='length-value' class='parameters'>100</span>
 				<div class='slide'>
 					<span>Size</span>
-					<input id='length' type='range' value='100' min='20' max='200' oninput="adjustLength(this.value)">
+					<input id='length-range' type='range' value='100' min='20' max='200' oninput="adjustLength(this.value)" onclick='setLengthDefault()'>
 				</div>
 			</div>
 			<div class='inner-container'>
 				<span id='width-value' class='parameters'>10</span>
 				<div id='thickness-value' class='slide'>
 					<span>Thickness</span>
-					<input id='width' type='range' value='10' min='5' max='20' oninput="adjustWidth(this.value)">
+					<input id='width-range' type='range' value='10' min='5' max='20' oninput="adjustWidth(this.value)" onclick='setWidthDefault()'>
 				</div>
 			</div>
-			<button id='asynch' onclick='asynchSwitch()'>Asynchronous: On/Off</button>
 			<div class='inner-container'>
 				<span id='async-delay-value' class='parameters'>30</span>
 				<div class='slide'>
 					<span>Asynchronous Delay</span>
-					<input id='asyncDelay' type='range' value='30' min='4' max='600' oninput="adjustAsynchDelay(this.value)">
+					<input id='asyncDelay-range' type='range' value='30' min='4' max='600' oninput="adjustAsynchDelay(this.value)">
 				</div>
 			</div>
+			<button id='asynch' onclick='asynchSwitch()'>Asynchronous: On/Off</button>
+			<button id='colors' onclick='colorSwitch()'>Grayscale/Color</button>
 			<!-- <input id='ang' type='range' value='60' min='1' max='150'> -->
 		</div>
 	</div>

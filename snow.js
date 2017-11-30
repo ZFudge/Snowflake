@@ -1,42 +1,58 @@
 const canvas = document.getElementById('canv');
 const context = canvas.getContext('2d');
 const snow = {
-  width: 10,
-  length: 100,
-  lateralLength: 0.5,
-  apicalLength: 0.8,
   tiers: 5,
   dendrites: 6,
-  skew: 0,
-  outerAngle: 30,
-  asynch: false,
+  rotation: 0,
+  outerAngle: 60,
+  bend: 0,
+  lateralLength: 0.4,
+  apicalLength: 0.6,  asynch: false,
+  length: 100,
+  width: 10,
   asynchDelay: 30,
-  colors: ['#870c8c', '#5f09c1', '#202ccc', '#2bc4bc', '#33b220', '#f78b32', '#f73347']
+  setToDefault: false,
+  controlsEnabled: true,
+  disableControls: function() {
+    snow.inputs.forEach(i => (i.id !== 'asyncDelay-range') ? i.setAttribute('disabled',true) : null);
+    snow.controlsEnabled = false;
+  },
+  enableControls: function() {
+    snow.inputs.forEach(i => i.removeAttribute('disabled'));
+    snow.controlsEnabled = true;
+  },
+  colors: ['#2BAD00','#00DE1E',  '#6000DE','#AF02E8',   '#E80288','#E80253'],
+  colored: false
 };
+snow.inputs = Array.from(document.getElementsByTagName('input'));
 
 context.lineCap = 'round';
 context.strokeStyle = 'white';
 
 async function iceSeed() {
-  snow.centerAngle = 360 / snow.dendrites;
+  snow.innerAngle = 360 / snow.dendrites;
   snow.colorUnits = 200 / snow.dendrites;
   context.save();
   context.translate(canvas.width/2, canvas.height/2);
-  context.rotate(snow.skew * Math.PI / 180);
+  context.rotate(snow.rotation * Math.PI / 180);
   for(let i = 0; i < snow.dendrites; i++) {
     context.save();
-    await dendrites(0, 0, snow.tiers, snow.length, snow.width, 200);
+    await dendrites(0, 0, snow.tiers, snow.length, snow.width, 200, snow.bend);
     context.restore();
     
-    context.rotate(snow.centerAngle * Math.PI / 180);
+    context.rotate(snow.innerAngle * Math.PI / 180);
   }
   context.restore();
+  if(!snow.controlsEnabled) snow.enableControls();
 }
 
-async function dendrites(x, y, tier, len, wid, c) {
+async function dendrites(x, y, tier, len, wid, c, bend) {
   if (tier > 0) {
-    if (snow.asynch) await timeout(snow.asynchDelay);
-    context.strokeStyle = `rgb(${c},${c},${c})`;//context.strokeStyle = snow.colors[tier];
+    if (snow.asynch) {
+      await timeout(snow.asynchDelay); 
+      if (snow.controlsEnabled) snow.disableControls();
+    }
+    (snow.colored) ? context.strokeStyle = snow.colors[tier-1] : context.strokeStyle = `rgb(${c},${c},${c})`;
     context.lineWidth = wid;
     
     context.save();
@@ -44,25 +60,25 @@ async function dendrites(x, y, tier, len, wid, c) {
     context.rotate(snow.outerAngle * Math.PI / 180);
     context.beginPath();
     context.moveTo(0, 0);
-    context.lineTo(0, len);
+    context.quadraticCurveTo(bend, len/2, 0, len);
     context.stroke();
     
     context.translate(0, len);
     context.save();
     
-    await dendrites(0, len, tier - 1, len * snow.lateralLength/*0.5*/, wid * 0.6, c-snow.colorUnits);
+    await dendrites(0, len, tier - 1, len * snow.lateralLength/*0.5*/, wid * 0.6, c-snow.colorUnits, bend * 0.6);
     
     context.restore();
     context.save();
     
     context.rotate(snow.outerAngle * -2 * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * snow.lateralLength, wid * 0.6, c-snow.colorUnits);
+    await dendrites(0, len, tier - 1, len * snow.lateralLength, wid * 0.6, c-snow.colorUnits, bend * 0.6);
     
     context.restore();
     context.save();
     
     context.rotate(-snow.outerAngle * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * snow.apicalLength, wid * 0.8, c-snow.colorUnits);
+    await dendrites(0, len, tier - 1, len * snow.apicalLength, wid * 0.8, c-snow.colorUnits, bend * 0.6);
     
     context.restore();
     context.restore();
@@ -87,68 +103,98 @@ function recreate() {
   iceSeed();
 }
 
-const tierSlide = document.getElementById('tiers');
+function setToDefault(textElement, input, type, defaultValue) {
+  if (snow.setToDefault) {
+    if(textElement.id !== 'rotation-value' && textElement.id !== 'angle-value' && textElement.id !== 'lateral-value' && textElement.id !== 'apical-value') {
+      snow[type] = textElement.innerHTML = input.value = defaultValue;
+    } else {
+      (textElement.id === 'rotation-value' || textElement.id === 'angle-value') ? textElement.innerHTML = parseFloat(defaultValue).toFixed(1) + ' Deg' : textElement.innerHTML = parseFloat(defaultValue * 100).toFixed(1);
+      snow[type] = input.value = defaultValue;
+    }
+    recreate();
+  }
+}
+
+const tierSlide = document.getElementById('tiers-range');
 const tierValue = document.getElementById('tier-value');
+const setTierDefault = () => setToDefault(tierValue, tierSlide, 'tiers', 5);
 function adjustTier(newTiers) {
-  tierValue.innerHTML = newTiers;
-  snow.tiers = newTiers;
+  tierValue.innerHTML = snow.tiers = newTiers;
   recreate();
 }
 
-const dendSlide = document.getElementById('dend');
+const dendSlide = document.getElementById('dendrite-range');
 const dendValue = document.getElementById('dendrite-value');
+const setDendriteDefault = () => setToDefault(dendValue, dendSlide, 'dendrites', 6);
 function adjustDendrites(newDend) {
-  dendValue.innerHTML = newDend;
-  snow.dendrites = newDend;
+  dendValue.innerHTML = snow.dendrites = newDend;
   recreate();
 }
 
-const angleSlide = document.getElementById('angle');
+const angleSlide = document.getElementById('angle-range');
 const angleValue = document.getElementById('angle-value');
+const setAngleDefault = () => setToDefault(angleValue, angleSlide, 'outerAngle', 60);
 function adjustAngle(newAng) {
   angleValue.innerHTML = parseFloat(newAng).toFixed(1) + ' Deg';
   snow.outerAngle = newAng;
   recreate();
 }
 
-const skewSlide = document.getElementById('skew');
+const bendSlide = document.getElementById('bend-range');
+const bendValue = document.getElementById('bend-value');
+const setBendDefault = () => setToDefault(bendValue, bendSlide, 'bend', 0);
+function adjustBend(newBend) {
+  bendValue.innerHTML = snow.bend = newBend;
+  recreate();
+}
+
+const rotationSlide = document.getElementById('rotation-range');
 const rotationValue = document.getElementById('rotation-value');
-function adjustSkew(newSkew) {
-  rotationValue.innerHTML = parseFloat(newSkew).toFixed(1) + ' Deg';
-  snow.skew = newSkew;
+const setRotationDefault = () => setToDefault(rotationValue, rotationSlide, 'rotation', 0);
+function adjustRotation(newRotation) {
+  rotationValue.innerHTML = parseFloat(newRotation).toFixed(1) + ' Deg';
+  snow.rotation = newRotation;
   recreate();
 }
 
-const widthSlide = document.getElementById('width');
+const widthSlide = document.getElementById('width-range');
 const widthValue = document.getElementById('width-value');
+const setWidthDefault = () => setToDefault(widthValue, widthSlide, 'width', 10);
 function adjustWidth(newWidth) {
-  widthValue.innerHTML = newWidth;
-  snow.width = newWidth;
+  widthValue.innerHTML = snow.width = newWidth;
   recreate();
 }
 
-const lateralLengthSlide = document.getElementById('lateralLength');
+const lateralSlide = document.getElementById('lateral-range');
 const lateralValue = document.getElementById('lateral-value');
+const setLateralDefault = () => setToDefault(lateralValue, lateralSlide, 'lateralLength', 0.4);
 function adjustLateralLength(newLatLen) {
   lateralValue.innerHTML = parseFloat(newLatLen * 100).toFixed(1);
   snow.lateralLength = newLatLen;
   recreate();
 }
 
-const apicalLengthSlide = document.getElementById('apicalLength');
+const apicalSlide = document.getElementById('apical-range');
 const apicalValue = document.getElementById('apical-value');
+const setApicalDefault = () => setToDefault(apicalValue, apicalSlide, 'apicalLength', 0.6);
 function adjustApicalLength(newApicLen) {
   apicalValue.innerHTML = parseFloat(newApicLen * 100).toFixed(1);
   snow.apicalLength = newApicLen;
   recreate();
 }
 
-const lengthSlide = document.getElementById('length');
+const lengthSlide = document.getElementById('length-range');
 const lengthValue = document.getElementById('length-value');
+const setLengthDefault = () => setToDefault(lengthValue, lengthSlide, 'length', 100);
 function adjustLength(newLen) {
-  lengthValue.innerHTML = newLen;
-  snow.length = newLen;
+  lengthValue.innerHTML = snow.length = newLen;
   recreate();
+}
+
+const asyncDelaySlide = document.getElementById('asynchDelay-range');
+const asyncDelayValue = document.getElementById('async-delay-value');
+function adjustAsynchDelay(newAsynDel) {
+  asyncDelayValue.innerHTML = snow.asynchDelay = newAsynDel;
 }
 
 const asyncBtn = document.getElementById('asynch');
@@ -156,11 +202,20 @@ function asynchSwitch() {
   snow.asynch = !snow.asynch;
 }
 
-const asyncDelaySlide = document.getElementById('asynchDelay');
-const asyncDelayValue = document.getElementById('async-delay-value');
-function adjustAsynchDelay(newAsynDel) {
-  asyncDelayValue.innerHTML = newAsynDel;
-  snow.asynchDelay = newAsynDel;
+const colorBtn = document.getElementById('colors');
+function colorSwitch() {
+  snow.colored = !snow.colored;
+  recreate();
+}
+
+
+document.addEventListener('keydown',keyPressed);
+document.addEventListener('keyup',keyReleased);
+function keyPressed(btn) {
+  if (btn.keyCode === 17) snow.setToDefault = true;
+}
+function keyReleased(btn) {
+  if (btn.keyCode === 17) snow.setToDefault = false;
 }
 
 iceSeed();
