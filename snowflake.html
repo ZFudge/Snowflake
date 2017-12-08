@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Snowflake</title>
+	<link href='styles/main.css' type='text/css' rel='stylesheet'>
+	<link rel="shortcut icon" type="image/x-icon" href="snow.ico">
+</head>
+<body>
+	<div id='container'>
+		<!-- 
+		-->
+		<div>
+			<canvas id='canv' height='800px' width='1200px'></canvas>
+		</div>
+		<div id='controller-box'>
+			<div class='sliders'>
+				<span class='names'>Tiers</span>	
+				<span id='tier-value' class=''>5</span>
+				<input id='tiers-range' type='range' value='5' min='1' max='6' 
+				oninput="adjustTier(this.value)" onclick='setTierDefault()'>
+				<!--  
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Dendrites</span>
+				<span id='dendrite-value' class=''>6</span>
+				<input id='dendrite-range' type='range' value='6' min='1' max='10' 
+				oninput="adjustDendrites(this.value)" onclick='setDendriteDefault()'>
+				<!--  
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Rotation</span>
+				<span id='rotation-value' class=''>0.0 Deg</span>
+					<input id='rotation-range' type='range' step='0.125' value='0' min='-360' max='360' 
+				oninput="adjustRotation(this.value)" onclick='setRotationDefault()'>
+				<!--  
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Angle</span>
+				<span id='angle-value' class=''>60.0 Deg</span>
+					<input id='angle-range' type='range' step='0.125' min='-150' max='400' value='60' 
+				oninput="adjustAngle(this.value)" onclick='setAngleDefault()'>
+				<!--  
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Bend</span>
+				<span id='bend-value' class=''>0</span>
+				<input id='bend-range' type='range' step='0.125' min='-60' max='60' value='0'
+				oninput="adjustBend(this.value)" onclick='setBendDefault()'>
+				<!--  
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Lateral Length</span>
+				<span id='lateral-value' class=''>40.0</span>
+				<input id='lateral-range' type='range'  step='0.0125' value='0.5' min='-0.85' max='0.85' 
+				oninput="adjustLateralLength(this.value)" onclick='setLateralDefault()'>
+				<!-- 
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Apical Length</span>
+				<span id='apical-value' class=''>60.0</span>
+				<input id='apical-range' type='range' step='0.0125' value='0.8' min='-1' max='1'
+				oninput="adjustApicalLength(this.value)" onclick='setApicalDefault()'>
+				<!--  
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Size</span>
+				<span id='length-value' class=''>100</span>
+				<input id='length-range' type='range' value='100' min='20' max='200'
+				oninput="adjustLength(this.value)" onclick='setLengthDefault()'>
+				<!--  
+				-->
+			</div>
+			<div id='thickness-value' class='sliders'>
+				<span class='names'>Thickness</span>
+				<span id='width-value' class=''>10</span>
+				<input id='width-range' type='range' value='10' min='5' max='20'
+				oninput="adjustWidth(this.value)" onclick='setWidthDefault()'>
+				<!-- 
+				-->
+			</div>
+			<div class='sliders'>
+				<span class='names'>Asynchronous Delay</span>
+				<span id='async-delay-value' class=''>30</span>
+				<input id='asyncDelay-range' type='range' value='30' min='4' max='600'
+				oninput="adjustAsynchDelay(this.value)"> 
+				<!-- 
+				-->
+			</div>
+			<div id='buttons'>
+				<button id='asynch' class='not-selected' onclick='asynchSwitch()'>Asynchronous</button>
+				<button id='colors' class='not-selected' onclick='colorSwitch()'>Grayscale/Color</button>
+				<button id='invert' class='not-selected' onclick='invertSwitch()'>Invert</button>
+			</div>
+		</div>
+	</div>
+	<!-- 
+	-->
+	<script src='snow.js'></script>
+</body>
+</html>

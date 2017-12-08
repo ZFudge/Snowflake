@@ -7,43 +7,68 @@ const snow = {
   outerAngle: 60,
   bend: 0,
   lateralLength: 0.4,
-  apicalLength: 0.6,  asynch: false,
+  apicalLength: 0.6, 
   length: 100,
   width: 10,
-  asynchDelay: 30,
+  asynchDelay: 30, 
+  asynch: false,
   setToDefault: false,
   controlsEnabled: true,
   disableControls: function() {
     snow.inputs.forEach(i => (i.id !== 'asyncDelay-range') ? i.setAttribute('disabled',true) : null);
+    ['colorBtn', 'invertBtn'].forEach(b => snow[b].setAttribute('disabled',true));
     snow.controlsEnabled = false;
   },
   enableControls: function() {
     snow.inputs.forEach(i => i.removeAttribute('disabled'));
+    ['colorBtn', 'invertBtn'].forEach(b => snow[b].removeAttribute('disabled'));
     snow.controlsEnabled = true;
   },
-  colors: ['#2BAD00','#00DE1E',  '#6000DE','#AF02E8',   '#E80288','#E80253'],
-  colored: false
+  colorBtn: document.getElementById('colors'),
+  colors: ['#00DEC0','#00DE1E',  '#6000DE','#AF02E8', '#E80288','#E80253'],
+  colored: false,
+  invertBtn: document.getElementById('invert'),
+  inverted: false
 };
 snow.inputs = Array.from(document.getElementsByTagName('input'));
 
-context.lineCap = 'round';
-context.strokeStyle = 'white';
+const controls = {
+  text: Array.from(document.getElementsByTagName('span')),
+  darkenDisplay: function() {
+    controls.text.forEach(t => t.style.backgroundColor = 'rgba(0, 0, 0, 0.5)') // background-color:rgba(250, 250, 250, 0.5)
+  },
+  lightenDisplay: function() {
+    controls.text.forEach(t => t.style.backgroundColor = 'rgba(208, 208, 208, 0.5)') // background-color:rgba(250, 250, 250, 0.5)
+  }
+}
+
+const controlBox = document.getElementById('controller-box');
+controlBox.height = 340;
+context.fillStyle = '#FAFAFA';
 
 async function iceSeed() {
   snow.innerAngle = 360 / snow.dendrites;
-  snow.colorUnits = 200 / snow.dendrites;
+  snow.colorUnits = (snow.inverted) ? Math.floor(155 / (snow.tiers - 1)) : parseInt(200 / (snow.tiers - 1));
+  const startColor = (snow.inverted) ? 100 : 200;
   context.save();
-  context.translate(canvas.width/2, canvas.height/2);
+  context.translate(canvas.width/3, canvas.height/2);
   context.rotate(snow.rotation * Math.PI / 180);
   for(let i = 0; i < snow.dendrites; i++) {
     context.save();
-    await dendrites(0, 0, snow.tiers, snow.length, snow.width, 200, snow.bend);
+    await dendrites(0, 0, snow.tiers, snow.length, snow.width, startColor, snow.bend);
     context.restore();
     
     context.rotate(snow.innerAngle * Math.PI / 180);
   }
   context.restore();
   if(!snow.controlsEnabled) snow.enableControls();
+}
+
+function recreate() {
+  (snow.inverted) ? context.fillStyle = 'black' : context.fillStyle = '#FAFAFA';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.lineCap = 'round';
+  iceSeed();
 }
 
 async function dendrites(x, y, tier, len, wid, c, bend) {
@@ -53,6 +78,7 @@ async function dendrites(x, y, tier, len, wid, c, bend) {
       if (snow.controlsEnabled) snow.disableControls();
     }
     (snow.colored) ? context.strokeStyle = snow.colors[tier-1] : context.strokeStyle = `rgb(${c},${c},${c})`;
+    const nextColor = (snow.inverted) ? c + snow.colorUnits : c - snow.colorUnits;
     context.lineWidth = wid;
     
     context.save();
@@ -66,19 +92,19 @@ async function dendrites(x, y, tier, len, wid, c, bend) {
     context.translate(0, len);
     context.save();
     
-    await dendrites(0, len, tier - 1, len * snow.lateralLength/*0.5*/, wid * 0.6, c-snow.colorUnits, bend * 0.6);
+    await dendrites(0, len, tier - 1, len * snow.lateralLength/*0.5*/, wid * 0.6, nextColor, bend * 0.6);
     
     context.restore();
     context.save();
     
     context.rotate(snow.outerAngle * -2 * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * snow.lateralLength, wid * 0.6, c-snow.colorUnits, bend * 0.6);
+    await dendrites(0, len, tier - 1, len * snow.lateralLength, wid * 0.6, nextColor, bend * 0.6);
     
     context.restore();
     context.save();
     
     context.rotate(-snow.outerAngle * Math.PI / 180);
-    await dendrites(0, len, tier - 1, len * snow.apicalLength, wid * 0.8, c-snow.colorUnits, bend * 0.6);
+    await dendrites(0, len, tier - 1, len * snow.apicalLength, wid * 0.8, nextColor, bend * 0.6);
     
     context.restore();
     context.restore();
@@ -88,19 +114,15 @@ async function dendrites(x, y, tier, len, wid, c, bend) {
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve,ms));
 }
+function waiting(fn) {
+  return new Promise(resolve => fn());
+}
 
 document.addEventListener('keydown',keyPushed);
-
 function keyPushed(btn) {
   if (btn.keyCode === 82) {
     recreate();
   }
-}
-
-function recreate() {
-  context.fillStyle = 'white';
-  context.fillRect(0,0,canvas.width, canvas.height);
-  iceSeed();
 }
 
 function setToDefault(textElement, input, type, defaultValue) {
@@ -200,6 +222,13 @@ function adjustAsynchDelay(newAsynDel) {
 const asyncBtn = document.getElementById('asynch');
 function asynchSwitch() {
   snow.asynch = !snow.asynch;
+  (snow.asynch) ? (
+    asyncBtn.classList.add('selected'), 
+    asyncBtn.style.backgroundColor = '#339'
+  ) : (
+    asyncBtn.classList.remove('selected'),
+    asyncBtn.style.backgroundColor = '#557'
+  )
 }
 
 const colorBtn = document.getElementById('colors');
@@ -208,6 +237,22 @@ function colorSwitch() {
   recreate();
 }
 
+const invertBtn = document.getElementById('invert');
+async function invertSwitch() {
+  waiting(function() {snow.inverted = !snow.inverted});
+  waiting(function() {
+    (snow.inverted) ? (
+      document.body.style.color = '#FAFAFA',
+      document.body.style.backgroundColor = canvas.style.backgroundColor = 'black',
+      controls.darkenDisplay()
+    ) : (
+      document.body.style.color = 'black',
+      document.body.style.backgroundColor = canvas.style.backgroundColor = '#FAFAFA',
+      controls.lightenDisplay()
+    )
+  });
+  recreate();
+}
 
 document.addEventListener('keydown',keyPressed);
 document.addEventListener('keyup',keyReleased);
@@ -218,4 +263,15 @@ function keyReleased(btn) {
   if (btn.keyCode === 17) snow.setToDefault = false;
 }
 
-iceSeed();
+window.addEventListener('resize', screen);
+function screen() {
+  canvas.width = window.innerWidth - 20;
+  canvas.height = window.innerHeight - 20; 
+  controlBox.style.marginTop = ( window.innerHeight / 2 - ( controlBox.height / 2 ) ) + 'px';
+  recreate();
+}
+
+screen();
+
+
+const apikey = 'cw0s1mviprm23c4bcgf56'

@@ -1,28 +1,131 @@
-#control-box {
+body {
+  	font-family: sans-serif;
+	background-color: #FAFAFA;
+}
+
+body, canvas {
+	transition: ease 0.5s
+}
+
+canvas {
+	position:absolute;
+}
+
+#controller-box {
+	position: relative;
+	z-index: 10;
+	float:right;
+  	min-width: 440px;
 	display: inline-block;
 	padding: 0px 30px 0px 30px;
-	margin-top:200px;
-	vertical-align: top;
+	margin-top: 200px;
 }
 
-.slide {
+span {
+	position: relative;
+  	background: rgba(208, 208, 208, 0.5);
+  	border-radius: 5px;
+  	padding: 2px 5px;
+}
+
+.sliders {
 	text-align: right;
-	display: inline-block;
-	float: right;
+}
+.names {
+  float: left;
 }
 
-.parameters {
-	position:relative;
-	float: left;
-	top: 8px;
-	text-align: left;
-	margin-right: 20px;
+.values {
+	min-width: 25px;
+  	margin-left: 14px;
+  	margin-top: -7px; /* for moz, off in Chr*/
+}
+
+/* arrow */
+.values::after {
+    position: absolute;
+    top: 5px;
+    right: -6px;
+    width: 0;
+    height: 0;
+    border-top: 7px solid transparent;
+    border-left: 7px solid #CCC;
+    border-bottom: 7px solid transparent;
+    content: '';
+}
+
+#async-value-container {
 	min-width: 25px;
 }
 
-.inner-container {
-	overflow: hidden;
-	vertical-align: middle;
-	margin: 2px;
-	padding: 0px 10px 0px 10px;
+span, button, canvas, .sliders, div {
+	-moz-user-select: none;
+  	-webkit-user-select: none;
+  	-ms-user-select: none;
+  	user-select: none;
 }
+
+input {
+  -webkit-appearance: none; /* overrides default CSS*/
+  width: 200px;
+  margin: 10px;
+  cursor: pointer;
+  
+  height: 3px;
+  background: #BBB;
+  border-radius: 5px;
+}
+input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  
+  border: 0;
+  background: #558;
+  border-radius: 50%; 
+  width: 15px;
+  height: 15px;
+}
+input::-moz-range-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  
+  border: 0;
+  background: #558;
+  border-radius: 50%; 
+  width: 15px;
+  height: 15px;
+}
+::-webkit-range-track {
+    background: #BBB;
+    border: 0;
+}
+::-moz-range-track {
+    background: #BBB;
+    border: 0;
+}
+
+#buttons {
+  text-align: center;
+  
+}
+button {
+  margin:2px;
+  padding: 5px 10px;
+  background: #557;
+  color: #EEE;
+  border-radius: 7px;
+  border: none;
+  outline: hidden;
+  text-decoration: none;
+  border: 3px solid transparent;
+}
+button:hover {
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.2), 0 1px 1px 0 rgba(0,0,0,0.19);
+}
+
+.selected {
+	border: 3px solid #AAA;
+}
+
