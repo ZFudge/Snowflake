@@ -1,7 +1,9 @@
 const canvas = document.getElementById('canv');
 const context = canvas.getContext('2d');
 const snow = {
-  tiers: 5,
+  seedX: canvas.width/3,
+  seedY: canvas.height/2,
+  tiers: 3,
   dendrites: 6,
   rotation: 0,
   outerAngle: 60,
@@ -51,7 +53,7 @@ async function iceSeed() {
   snow.colorUnits = (snow.inverted) ? Math.floor(155 / (snow.tiers - 1)) : parseInt(200 / (snow.tiers - 1));
   const startColor = (snow.inverted) ? 100 : 200;
   context.save();
-  context.translate(canvas.width/3, canvas.height/2);
+  context.translate(snow.seedX, snow.seedY);
   context.rotate(snow.rotation * Math.PI / 180);
   for(let i = 0; i < snow.dendrites; i++) {
     context.save();
@@ -139,7 +141,7 @@ function setToDefault(textElement, input, type, defaultValue) {
 
 const tierSlide = document.getElementById('tiers-range');
 const tierValue = document.getElementById('tier-value');
-const setTierDefault = () => setToDefault(tierValue, tierSlide, 'tiers', 5);
+const setTierDefault = () => setToDefault(tierValue, tierSlide, 'tiers', 3);
 function adjustTier(newTiers) {
   tierValue.innerHTML = snow.tiers = newTiers;
   recreate();
@@ -267,7 +269,15 @@ window.addEventListener('resize', screen);
 function screen() {
   canvas.width = window.innerWidth - 20;
   canvas.height = window.innerHeight - 20; 
-  controlBox.style.marginTop = ( window.innerHeight / 2 - ( controlBox.height / 2 ) ) + 'px';
+  if (window.innerWidth > 983) {
+    snow.seedX = canvas.width/3,
+    snow.seedY = canvas.height/2,
+    controlBox.style.marginTop = ( window.innerHeight / 2 - ( controlBox.height / 2 ) ) + 'px';  
+  } else {
+    snow.seedX = canvas.width/2,
+    snow.seedY = canvas.height/3,
+    controlBox.style.marginTop = ( window.innerHeight - controlBox.height + 50) + 'px';
+  }
   recreate();
 }
 

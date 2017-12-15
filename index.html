@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Snowflake</title>
-	<link href='styles/main.css' type='text/css' rel='stylesheet'>
+	<title>ZFudge - Snowflake</title>
 	<link rel="shortcut icon" type="image/x-icon" href="snow.ico">
+	<link href='snow.css' type='text/css' rel='stylesheet'>
 </head>
 <body>
 	<div id='container'>
-		<!-- 
-		-->
-		<div>
-			<canvas id='canv' height='800px' width='1200px'></canvas>
-		</div>
+		<iframe src="../menu.html" frameborder="0" scrolling='no' height='300' width='125'></iframe>
+		<canvas id='canv' height='800px' width='1200px'></canvas>
 		<div id='controller-box'>
 			<div class='sliders'>
 				<span class='names'>Tiers</span>	
-				<span id='tier-value' class=''>5</span>
-				<input id='tiers-range' type='range' value='5' min='1' max='6' 
+				<span id='tier-value' class=''>3</span>
+				<input id='tiers-range' type='range' value='3' min='1' max='5' 
 				oninput="adjustTier(this.value)" onclick='setTierDefault()'>
 				<!--  
 				-->
@@ -24,7 +21,7 @@
 			<div class='sliders'>
 				<span class='names'>Dendrites</span>
 				<span id='dendrite-value' class=''>6</span>
-				<input id='dendrite-range' type='range' value='6' min='1' max='10' 
+				<input id='dendrite-range' type='range' value='6' min='1' max='8' 
 				oninput="adjustDendrites(this.value)" onclick='setDendriteDefault()'>
 				<!--  
 				-->
