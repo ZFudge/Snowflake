@@ -267,21 +267,26 @@ function keyReleased(btn) {
 
 window.addEventListener('resize', screen);
 function screen() {
-  canvas.width = window.innerWidth - 20;
-  canvas.height = window.innerHeight - 20; 
-  if (window.innerWidth > 983) {
-    snow.seedX = canvas.width/3,
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight; 
+  if (window.innerHeight < window.innerWidth) {
+    snow.seedX = (canvas.width - 440) / 2,
     snow.seedY = canvas.height/2,
+    controlBox.style.float = 'right';
+    controlBox.style.position = 'relative';
+    controlBox.style.display = 'inline-block';
     controlBox.style.marginTop = ( window.innerHeight / 2 - ( controlBox.height / 2 ) ) + 'px';  
   } else {
     snow.seedX = canvas.width/2,
     snow.seedY = canvas.height/3,
-    controlBox.style.marginTop = ( window.innerHeight - controlBox.height + 50) + 'px';
+
+    controlBox.style.float = 'none';
+    controlBox.style.position = 'absolute';
+    controlBox.style.display = 'inherit';
+    controlBox.style.marginLeft = window.innerWidth / 2 - 250 + 'px';
+    controlBox.style.marginTop = ( window.innerHeight - controlBox.height + 40) + 'px';
   }
   recreate();
 }
 
 screen();
-
-
-const apikey = 'cw0s1mviprm23c4bcgf56'

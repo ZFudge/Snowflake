@@ -1,6 +1,7 @@
 body {
   font-family: sans-serif;
 	background-color: #FAFAFA;
+  overflow: hidden
 }
 
 body, canvas {
@@ -14,30 +15,35 @@ iframe {
   display: inline-block;
 }
 
-#menu-container {
-  border: 1px solid black;
-}
-
 canvas {
   margin-left: -130px;
   position: absolute;
 }
 
 #controller-box {
+  display: inline-block;
 	position: relative;
+  text-align: center;
 	z-index: 10;
 	float: right;
-  min-width: 440px;
-	display: inline-block;
-	padding: 0px 30px 0px 30px;
+  padding: 0px 30px 0px 30px;
 	margin-top: 200px;
+  margin-left: 0px;
+  margin: 0 auto;
+  min-width: 440px;
+  transition: ease 1.2s
+
+}
+
+#inner-container {
+
 }
 
 span {
 	position: relative;
-  	background: rgba(208, 208, 208, 0.5);
-  	border-radius: 5px;
-  	padding: 2px 5px;
+	background: rgba(208, 208, 208, 0.5);
+	border-radius: 5px;
+	padding: 2px 5px;
 }
 
 .sliders {
@@ -72,9 +78,9 @@ span {
 
 span, button, canvas, .sliders, div {
 	-moz-user-select: none;
-  	-webkit-user-select: none;
-  	-ms-user-select: none;
-  	user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 input {
@@ -122,9 +128,9 @@ input::-moz-range-thumb {
 }
 
 #buttons {
-  text-align: center;
   
 }
+
 button {
   margin:2px;
   padding: 5px 10px;
