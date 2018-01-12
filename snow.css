@@ -1,22 +1,24 @@
+html, body, div, canvas { 
+    margin: 0;
+    padding: 0;
+} /* removes defaults */
+
 body {
   font-family: sans-serif;
 	background-color: #FAFAFA;
-  overflow: hidden
+  overflow: hidden;
+  opacity: 0;
+  transition-duration: 2s;
 }
 
 body, canvas {
 	transition: ease 0.5s
 }
 
-iframe {
-  position: relative;
-  z-index: 1;
-  float: left;
-  display: inline-block;
+#container {
 }
 
 canvas {
-  margin-left: -130px;
   position: absolute;
 }
 
@@ -32,7 +34,6 @@ canvas {
   margin: 0 auto;
   min-width: 440px;
   transition: ease 1.2s
-
 }
 
 #inner-container {
@@ -151,4 +152,13 @@ button:focus {
 
 .selected {
 	border: 3px solid #AAA;
+}
+
+.no-highlight {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
