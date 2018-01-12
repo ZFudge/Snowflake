@@ -12,6 +12,24 @@
 		<div id='controller-box'>
 			<div id='inner-container'>
 				<div class='sliders'>
+					<span class='names'>Angle</span>
+					<span id='angle-value' class=''>60.0 Deg</span>
+						<input id='angle-range' type='range' step='0.125' min='-150' max='400' value='60' 
+					oninput="adjustAngle(this.value)" onclick='setAngleDefault()'>
+				</div>
+				<div class='sliders'>
+					<span class='names'>Apical Length</span>
+					<span id='apical-value' class=''>60.0</span>
+					<input id='apical-range' type='range' step='0.0125' value='0.8' min='-1' max='1'
+					oninput="adjustApicalLength(this.value)" onclick='setApicalDefault()'>
+				</div>
+				<div class='sliders'>
+					<span class='names'>Lateral Length</span>
+					<span id='lateral-value' class=''>40.0</span>
+					<input id='lateral-range' type='range'  step='0.0125' value='0.5' min='-0.85' max='0.85' 
+					oninput="adjustLateralLength(this.value)" onclick='setLateralDefault()'>
+				</div>
+				<div class='sliders'>
 					<span class='names'>Tiers</span>	
 					<span id='tier-value' class=''>3</span>
 					<input id='tiers-range' type='range' value='3' min='1' max='5' 
@@ -24,34 +42,10 @@
 					oninput="adjustDendrites(this.value)" onclick='setDendriteDefault()'>
 				</div>
 				<div class='sliders'>
-					<span class='names'>Rotation</span>
-					<span id='rotation-value' class=''>0.0 Deg</span>
-						<input id='rotation-range' type='range' step='0.125' value='0' min='-360' max='360' 
-					oninput="adjustRotation(this.value)" onclick='setRotationDefault()'>
-				</div>
-				<div class='sliders'>
-					<span class='names'>Angle</span>
-					<span id='angle-value' class=''>60.0 Deg</span>
-						<input id='angle-range' type='range' step='0.125' min='-150' max='400' value='60' 
-					oninput="adjustAngle(this.value)" onclick='setAngleDefault()'>
-				</div>
-				<div class='sliders'>
 					<span class='names'>Bend</span>
 					<span id='bend-value' class=''>0</span>
 					<input id='bend-range' type='range' step='0.125' min='-60' max='60' value='0'
 					oninput="adjustBend(this.value)" onclick='setBendDefault()'>
-				</div>
-				<div class='sliders'>
-					<span class='names'>Lateral Length</span>
-					<span id='lateral-value' class=''>40.0</span>
-					<input id='lateral-range' type='range'  step='0.0125' value='0.5' min='-0.85' max='0.85' 
-					oninput="adjustLateralLength(this.value)" onclick='setLateralDefault()'>
-				</div>
-				<div class='sliders'>
-					<span class='names'>Apical Length</span>
-					<span id='apical-value' class=''>60.0</span>
-					<input id='apical-range' type='range' step='0.0125' value='0.8' min='-1' max='1'
-					oninput="adjustApicalLength(this.value)" onclick='setApicalDefault()'>
 				</div>
 				<div class='sliders'>
 					<span class='names'>Size</span>
@@ -64,6 +58,12 @@
 					<span id='width-value' class=''>10</span>
 					<input id='width-range' type='range' value='10' min='5' max='20'
 					oninput="adjustWidth(this.value)" onclick='setWidthDefault()'>
+				</div>
+				<div class='sliders'>
+					<span class='names'>Rotation</span>
+					<span id='rotation-value' class=''>0.0 Deg</span>
+						<input id='rotation-range' type='range' step='0.125' value='0' min='-360' max='360' 
+					oninput="adjustRotation(this.value)" onclick='setRotationDefault()'>
 				</div>
 				<div class='sliders'>
 					<span class='names'>Asynchronous Delay</span>
