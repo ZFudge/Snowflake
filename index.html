@@ -8,6 +8,7 @@
 </head>
 <body>
 	<div id='container'>
+		<div id="nav-placeholder"></div>
 		<canvas id='canv' height='800px' width='1200px'></canvas>
 		<div id='controller-box'>
 			<div id='inner-container'>
@@ -68,7 +69,7 @@
 				<div class='sliders'>
 					<span class='names'>Asynchronous Delay</span>
 					<span id='async-delay-value' class=''>30</span>
-					<input id='asyncDelay-range' type='range' value='30' min='4' max='600'
+					<input id='asyncDelay-range' type='range' value='30' min='4' max='300'
 					oninput="adjustAsynchDelay(this.value)"> 
 				</div>
 				<div id='buttons'>
@@ -81,6 +82,7 @@
 	</div>
 	<script src='snow.js'></script>
 	<script type="text/javascript">
+		document.getElementById('nav-placeholder').innerHTML = '<object type="text/html" data="../nav.html" ></object>';
 		const control = document.getElementById('controller-box');
 		const fadeIn = ()=>control.style.opacity = 1;
 		const fadeOut = ()=>control.style.opacity = 0.3;

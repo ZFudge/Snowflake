@@ -67,8 +67,8 @@ async function iceSeed() {
 }
 
 function recreate() {
-  (snow.inverted) ? context.fillStyle = 'black' : context.fillStyle = '#FAFAFA';
-  context.fillRect(0, 0, canvas.width, canvas.height);
+  //(snow.inverted) ? context.fillStyle = 'black' : context.fillStyle = '#FAFAFA';
+  context.clearRect(0, 0, canvas.width, canvas.height);
   context.lineCap = 'round';
   iceSeed();
 }
@@ -241,15 +241,15 @@ function colorSwitch() {
 
 const invertBtn = document.getElementById('invert');
 async function invertSwitch() {
-  waiting(function() {snow.inverted = !snow.inverted});
+  waiting(() => snow.inverted = !snow.inverted);
   waiting(function() {
     (snow.inverted) ? (
       document.body.style.color = '#FAFAFA',
-      document.body.style.backgroundColor = canvas.style.backgroundColor = 'black',
+      document.body.style.backgroundColor = 'black',
       controls.darkenDisplay()
     ) : (
       document.body.style.color = 'black',
-      document.body.style.backgroundColor = canvas.style.backgroundColor = '#FAFAFA',
+      document.body.style.backgroundColor = 'transparent',
       controls.lightenDisplay()
     )
   });

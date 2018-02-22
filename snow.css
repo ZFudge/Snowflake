@@ -5,10 +5,18 @@ html, body, div, canvas {
 
 body {
   font-family: sans-serif;
-	background-color: #FAFAFA;
   overflow: hidden;
   opacity: 0;
   transition-duration: 2s;
+}
+
+#nav-placeholder object {
+  width: 100%;
+}
+#nav-placeholder {
+  width: 100%;
+  align-self: flex-end;
+  position: absolute;
 }
 
 body, canvas {
@@ -19,6 +27,8 @@ body, canvas {
 }
 
 canvas {
+  pointer-events: none;
+  background-color: transparent;
   position: absolute;
 }
 
